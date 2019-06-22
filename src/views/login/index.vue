@@ -1,14 +1,16 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+    <div>
+        <p>Login Compoent</p>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: 'AppLogin',
   data () {
-    return {}
+    return {
+
+    }
   }
 }
 </script>
