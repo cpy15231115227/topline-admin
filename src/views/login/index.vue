@@ -19,7 +19,7 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button class="btn-login" type="primary" @click="onSubmit">登陆</el-button>
+        <el-button class="btn-login" type="primary" @click="headleLogin">登陆</el-button>
       </el-form-item>
     </el-form>
     </div>
@@ -41,8 +41,25 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    headleLogin () {
+      // console.log('headleLogin')
+      axios({
+        method: 'POST',
+        url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+        data: this.form
+      }).then(res => { // >=200 && < 400 的状态码会进入 then 成功
+        console.log(res.data)
+        this.$message({
+          message: '登陆成功',
+          type: 'success'
+        })
+        this.$router.push({
+          name: 'home'
+        })
+      })
+        .catch((e) => {
+          this.$message.error('登陆失败，手机号或验证错误')
+        }) // >= 400 的状态码都会进入这里
     },
     handleSendCode () {
       const { mobile } = this.form
@@ -68,8 +85,25 @@ export default {
           }).onSuccess(function () {
             // your code
             // 这个数据用于短信验证码，发短信用的
-            // 人机交换验证通过
-            console.log(captchaObj.getValidate())
+            // 人机交互验证通过
+            // console.log(captchaObj.getValidate())
+            const {
+              geetest_challenge: challenge,
+              geetest_seccode: seccode,
+              geetest_validate: validate
+            } = captchaObj.getValidate()
+            axios({
+              method: 'GET',
+              url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+              params: {
+                challenge,
+                validate,
+                seccode
+              }
+            }).then(res => {
+              console.log(res.data)
+              // 开启倒计时效果
+            })
           }).onError(function () {
             // your code
           })
