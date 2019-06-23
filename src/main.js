@@ -7,6 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 如果找到目录，优先加载目录中的 index
 import router from './router'
 
+// 引入文件公共样式文件，最好在 element 样式文件之后，可以自定义修改 element 内置样式
+import './styles/index.less'
+
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
