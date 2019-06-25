@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import nprogress from 'nprogress'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     // {
     //   name: 'home',
@@ -42,3 +43,43 @@ export default new Router({
     }
   ]
 })
+
+/*
+  全局前置守卫
+  当访问到页面的时候，会先进入这里
+*/
+router.beforeEach((to, from, next) => {
+  // 路由导航前开启进度条
+  nprogress.start()
+
+  next() // 往后走
+  const userInfo = window.localStorage.getItem('user_info')
+  if (to.path !== '/login') {
+    // 非登陆页面
+    if (!userInfo) {
+      // 没有登陆，跳转到登录页
+      next({ name: 'login' })
+    } else {
+      // 登陆了，允许通过
+      next()
+    }
+  } else {
+    // 登陆页面
+    if (!userInfo) {
+      // 没有登陆，允许通过
+      next()
+    } else {
+      // 登陆了，不允许通过
+      // next(false) // 中断当前导航  在某个页面时
+      window.location.href = '/#/'
+      window.location.reload()
+    }
+  }
+})
+
+router.afterEach((to, from) => {
+  // 路由导航完成关闭进度条
+  nprogress.done()
+})
+
+export default router
