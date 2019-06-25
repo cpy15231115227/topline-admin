@@ -50,7 +50,7 @@
 <script>
 import axios from 'axios'
 import '@/vendor/gt.js' // 引入极验 Javascript SDK 文件，通过 window.initGeetest 使用
-const initCodeTimeSeconds = 5
+const initCodeTimeSeconds = 60
 
 export default {
   name: 'AppLogin',
@@ -101,7 +101,10 @@ export default {
         url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
         data: this.form
       }).then(res => { // >=200 && < 400 的状态码会进入 then 成功
-        console.log(res.data)
+        // console.log(res.data)
+        const userInfo = res.data.data
+        // 浏览器的本地存储，持久存储  localStorage
+        window.localStorage.setItem('user_info', JSON.stringify(userInfo))
         this.$message({
           message: '登陆成功',
           type: 'success'
