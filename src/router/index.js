@@ -14,10 +14,26 @@ export default new Router({
     //   // component: () => import('@views/home/index.vue')
     //   component: () => import('@/views/home')
     // },
-    {
-      name: 'layout',
+    { // layout 显示到 App 根组件的路由出口
+      // 这个路由名没有意义，他调用时也会从它的默认子路由调
+      // name: 'layout', // 使用 JavaScript 命名路由导航不会渲染默认子路由
       path: '/',
-      component: () => import('@/views/layout')
+      component: () => import('@/views/layout'),
+      // 嵌套路由
+      // 子路由
+      // 所有 children 路由都显示到父路由的 router-view 中
+      children: [
+        {
+          name: 'home',
+          path: '', // 父路由的默认内容
+          component: () => import('@/views/home')
+        },
+        {
+          name: 'publish',
+          path: '/publish',
+          component: () => import('@/views/publish')
+        }
+      ]
     },
     {
       name: 'login',
