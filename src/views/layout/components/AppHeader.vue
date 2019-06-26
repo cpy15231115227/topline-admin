@@ -4,6 +4,7 @@
     <el-col :span="5" :offset="5">
       <el-dropdown trigger="click" @command="handleCommand">
         <span class="el-dropdown-link">
+          <!-- <img width="30" src="./collect_select.png"> -->
           <img width="30" :src="userInfo.photo">
           {{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
@@ -21,6 +22,8 @@
 </template>
 
 <script>
+import { removeUser, getUser } from '@/utils/auth'
+
 export default {
   name: 'AppHeader',
   data () {
@@ -29,7 +32,8 @@ export default {
     }
   },
   created () {
-    this.userInfo = JSON.parse(window.localStorage.getItem('user_info'))
+    // this.userInfo = JSON.parse(window.localStorage.getItem('user_info'))
+    this.userInfo = getUser()
   },
   methods: {
     handleLogout () {
@@ -39,7 +43,8 @@ export default {
         type: 'warning'
       }).then(() => {
         // 清空本地存储中 user_info
-        window.localStorage.removeItem('user_info')
+        // window.localStorage.removeItem('user_info')
+        removeUser()
 
         // 跳转到登陆页
         this.$router.push({ name: 'login' })

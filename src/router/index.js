@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import nprogress from 'nprogress'
+import { getUser } from '@/utils/auth'
 
 Vue.use(Router)
 
@@ -44,16 +45,20 @@ const router = new Router({
   ]
 })
 
-/*
-  全局前置守卫
-  当访问到页面的时候，会先进入这里
-*/
+/**
+ * 全局前置守卫
+ * 当你访问路由页面的时候，会先进入这里
+ * to 要去哪里的相关数据
+ * from 来自哪里的相关数据
+ * next 允许通过的方法
+ */
 router.beforeEach((to, from, next) => {
   // 路由导航前开启进度条
   nprogress.start()
 
   next() // 往后走
-  const userInfo = window.localStorage.getItem('user_info')
+  // const userInfo = window.localStorage.getItem('user_info')
+  const userInfo = getUser()
   if (to.path !== '/login') {
     // 非登陆页面
     if (!userInfo) {
@@ -82,4 +87,5 @@ router.afterEach((to, from) => {
   nprogress.done()
 })
 
+// 导出路由
 export default router
